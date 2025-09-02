@@ -31,8 +31,8 @@ export function AnalogClock() {
               className={`absolute ${isMainHour ? "w-0.5 h-3 bg-gray-800" : "w-0.5 h-2 bg-gray-600"}`}
               style={{
                 left: "50%",
-                top: "4px",
-                transformOrigin: "50% calc(100% + 36px)",
+                top: "6px",
+                transformOrigin: "50% calc(100% + 34px)",
                 transform: `translateX(-50%) rotate(${angle + 90}deg)`,
               }}
             />
