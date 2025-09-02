@@ -145,9 +145,7 @@ export default function FoodPredictionApp() {
                   <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-4 border-blue-200"></div>
                   <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-4 border-blue-600 border-t-transparent absolute top-0"></div>
                 </div>
-                <p className="text-center font-medium text-gray-700 text-sm sm:text-base">
-                  جاري التحليل بالذكاء الاصطناعي...
-                </p>
+                <p className="text-center font-medium text-gray-700 text-sm sm:text-base">جاري التحليل...</p>
               </div>
             </div>
           </div>
