@@ -1,13 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { predictionEngine } from "@/lib/ai-prediction-engine"
 import { createClient } from "@/lib/supabase/server"
-import path from "path"
-
-const DATA_DIR = path.join(process.cwd(), "data")
-const SEQUENCE_FILE = path.join(DATA_DIR, "food-sequences.json")
 
 async function getRecentSequence(): Promise<string[]> {
   try {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      console.log("[v0] Supabase environment variables not found, using fallback")
+      return []
+    }
+
     const supabase = await createClient()
 
     const { data: sequences, error } = await supabase
@@ -32,6 +33,11 @@ async function getRecentSequence(): Promise<string[]> {
 
 async function saveToSequence(food: string): Promise<void> {
   try {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      console.log("[v0] Supabase not available, skipping sequence save")
+      return
+    }
+
     const supabase = await createClient()
 
     const now = new Date()
