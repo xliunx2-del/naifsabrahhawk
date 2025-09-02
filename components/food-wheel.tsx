@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
+import { AnalogClock } from "./analog-clock"
 
 interface FoodItem {
   name: string
@@ -207,9 +207,8 @@ export function FoodWheel({ onFoodClick, highlightedFoods, selectedFood, isLoadi
         ))}
       </div>
 
-      {/* Center indicator */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full shadow-lg animate-pulse"></div>
+        <AnalogClock />
       </div>
 
       <style jsx>{`
