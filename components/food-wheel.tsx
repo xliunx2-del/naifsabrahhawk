@@ -195,7 +195,7 @@ export function FoodWheel({
 
               {animalPredictions.includes(food.name) && (
                 <div className="absolute -top-8 sm:-top-10 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-xs sm:text-sm px-3 py-1 rounded-full font-bold animate-bounce z-30 shadow-lg">
-                  حيوان متوقع!
+                  لحوم
                 </div>
               )}
 
@@ -241,7 +241,7 @@ export function FoodWheel({
 
             {animalPredictions.includes(food.name) && (
               <div className="absolute -top-8 sm:-top-10 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-xs sm:text-sm px-3 py-1 rounded-full font-bold animate-bounce z-30 shadow-lg">
-                حيوان متوقع!
+                لحوم
               </div>
             )}
 
