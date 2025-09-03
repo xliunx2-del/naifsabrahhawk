@@ -23,6 +23,31 @@ export default function FoodPredictionApp() {
   const [isAnimalPredicting, setIsAnimalPredicting] = useState(false)
   const [animalPredictions, setAnimalPredictions] = useState<string[]>([])
 
+  const vegetables = ["جزر", "طماط", "بيبار", "ذرة"]
+
+  const checkVegetableCompletion = (sequence: string[]) => {
+    const uniqueVegetables = new Set(sequence.filter((food) => vegetables.includes(food)))
+    return uniqueVegetables.size === 4
+  }
+
+  const triggerAnimalPrediction = async (sequence: string[]) => {
+    try {
+      const response = await fetch("/api/predict-animals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sequence }),
+      })
+
+      const data = await response.json()
+      if (data.predictions && data.predictions.length > 0) {
+        const predictedAnimals = data.predictions.map((p: any) => p.animal)
+        handleAnimalPredict(predictedAnimals)
+      }
+    } catch (error) {
+      console.error("Auto animal prediction error:", error)
+    }
+  }
+
   const handleFoodClick = async (foodName: string) => {
     setSelectedFood(foodName)
     setIsLoading(true)
@@ -48,6 +73,10 @@ export default function FoodPredictionApp() {
   const handleSequenceClick = (foodName: string) => {
     const newSequence = [...currentSequence, foodName]
     setCurrentSequence(newSequence)
+
+    if (checkVegetableCompletion(newSequence)) {
+      triggerAnimalPrediction(newSequence)
+    }
   }
 
   const handleSaveResults = async () => {
@@ -90,6 +119,10 @@ export default function FoodPredictionApp() {
 
   const handleSequenceChange = (sequence: string[]) => {
     setCurrentSequence(sequence)
+
+    if (checkVegetableCompletion(sequence)) {
+      triggerAnimalPrediction(sequence)
+    }
   }
 
   const handleSequencesLoaded = (sequences: string[][]) => {
@@ -104,7 +137,7 @@ export default function FoodPredictionApp() {
       setIsAnimalPredicting(false)
       setAnimalPredictions([])
       setCurrentSequence([])
-    }, 3000)
+    }, 4000)
   }
 
   return (
