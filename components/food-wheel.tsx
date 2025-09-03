@@ -16,6 +16,8 @@ interface FoodWheelProps {
   highlightedFoods: string[]
   selectedFood: string | null
   isLoading: boolean
+  animalPredictions: string[]
+  onSequenceClick?: (foodName: string) => void
 }
 
 const foods: FoodItem[] = [
@@ -84,7 +86,14 @@ const bottomFoods: FoodItem[] = [
   },
 ]
 
-export function FoodWheel({ onFoodClick, highlightedFoods, selectedFood, isLoading }: FoodWheelProps) {
+export function FoodWheel({
+  onFoodClick,
+  highlightedFoods,
+  selectedFood,
+  isLoading,
+  animalPredictions = [],
+  onSequenceClick,
+}: FoodWheelProps) {
   const [hoveredFood, setHoveredFood] = useState<string | null>(null)
 
   const getClockPosition = (position: string, screenSize: "sm" | "md" | "lg" = "md") => {
@@ -105,7 +114,9 @@ export function FoodWheel({ onFoodClick, highlightedFoods, selectedFood, isLoadi
       "absolute w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg touch-manipulation"
 
     let statusClass = ""
-    if (selectedFood === foodName) {
+    if (animalPredictions.includes(foodName)) {
+      statusClass = "ring-4 ring-red-800 shadow-red-800/80 bg-red-900/30 animate-pulse scale-105 sm:scale-110"
+    } else if (selectedFood === foodName) {
       statusClass = "ring-4 ring-blue-500 shadow-blue-500/50 scale-105 sm:scale-110"
     } else if (highlightedFoods.includes(foodName)) {
       statusClass = "ring-4 ring-yellow-400 shadow-yellow-400/60 animate-pulse"
@@ -114,6 +125,13 @@ export function FoodWheel({ onFoodClick, highlightedFoods, selectedFood, isLoadi
     }
 
     return `${baseClass} ${statusClass}`
+  }
+
+  const handleFoodClick = (foodName: string) => {
+    if (onSequenceClick) {
+      onSequenceClick(foodName)
+    }
+    onFoodClick(foodName)
   }
 
   return (
@@ -135,7 +153,7 @@ export function FoodWheel({ onFoodClick, highlightedFoods, selectedFood, isLoadi
           return (
             <button
               key={food.name}
-              onClick={() => onFoodClick(food.name)}
+              onClick={() => handleFoodClick(food.name)}
               onMouseEnter={() => setHoveredFood(food.name)}
               onMouseLeave={() => setHoveredFood(null)}
               className={getFoodButtonClass(food.name)}
@@ -177,7 +195,7 @@ export function FoodWheel({ onFoodClick, highlightedFoods, selectedFood, isLoadi
         {bottomFoods.map((food) => (
           <button
             key={food.name}
-            onClick={() => onFoodClick(food.name)}
+            onClick={() => handleFoodClick(food.name)}
             onMouseEnter={() => setHoveredFood(food.name)}
             onMouseLeave={() => setHoveredFood(null)}
             className={getFoodButtonClass(food.name)}

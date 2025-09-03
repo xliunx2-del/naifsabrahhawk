@@ -12,7 +12,7 @@ interface AnimalPrediction {
 
 interface AnimalPredictionDisplayProps {
   sequence: string[]
-  onPredict: () => void
+  onPredict: (predictedAnimals: string[]) => void
   isLoading: boolean
 }
 
@@ -27,7 +27,6 @@ export function AnimalPredictionDisplay({ sequence, onPredict, isLoading }: Anim
     }
 
     setError("")
-    onPredict()
 
     try {
       const response = await fetch("/api/predict-animals", {
@@ -42,6 +41,8 @@ export function AnimalPredictionDisplay({ sequence, onPredict, isLoading }: Anim
 
       if (data.success) {
         setPredictions(data.predictions)
+        const predictedAnimals = data.predictions.map((p: AnimalPrediction) => p.animal)
+        onPredict(predictedAnimals)
       } else {
         setError(data.error || "حدث خطأ في التنبؤ")
       }

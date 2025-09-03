@@ -21,6 +21,7 @@ export default function FoodPredictionApp() {
   const [currentSequence, setCurrentSequence] = useState<string[]>([])
   const [savedSequences, setSavedSequences] = useState<string[][]>([])
   const [isAnimalPredicting, setIsAnimalPredicting] = useState(false)
+  const [animalPredictions, setAnimalPredictions] = useState<string[]>([])
 
   const handleFoodClick = async (foodName: string) => {
     setSelectedFood(foodName)
@@ -42,6 +43,11 @@ export default function FoodPredictionApp() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleSequenceClick = (foodName: string) => {
+    const newSequence = [...currentSequence, foodName]
+    setCurrentSequence(newSequence)
   }
 
   const handleSaveResults = async () => {
@@ -90,9 +96,15 @@ export default function FoodPredictionApp() {
     setSavedSequences(sequences)
   }
 
-  const handleAnimalPredict = () => {
+  const handleAnimalPredict = async (predictedAnimals: string[]) => {
     setIsAnimalPredicting(true)
-    setTimeout(() => setIsAnimalPredicting(false), 2000)
+    setAnimalPredictions(predictedAnimals)
+
+    setTimeout(() => {
+      setIsAnimalPredicting(false)
+      setAnimalPredictions([])
+      setCurrentSequence([])
+    }, 3000)
   }
 
   return (
@@ -122,6 +134,8 @@ export default function FoodPredictionApp() {
             highlightedFoods={highlightedFoods}
             selectedFood={selectedFood}
             isLoading={isLoading}
+            animalPredictions={animalPredictions}
+            onSequenceClick={handleSequenceClick}
           />
         </div>
 
@@ -191,7 +205,7 @@ export default function FoodPredictionApp() {
           {/* Instructions */}
           <div className="bg-blue-500/20 border border-blue-300/30 rounded-lg p-4 text-center">
             <p className="text-white text-sm sm:text-base">
-              استخدم الأدوات أعلاه لإنشاء تسلسلات الأطعمة والتنبؤ بالحيوانات وإدارة البيانات
+              انقر على صور الأطعمة في العجلة لإضافتها للتسلسل، أو استخدم الأدوات أعلاه لإنشاء تسلسلات والتنبؤ بالحيوانات
             </p>
           </div>
         </div>
