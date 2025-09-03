@@ -6,6 +6,10 @@ import { PredictionDisplay } from "@/components/prediction-display"
 import { AIStatusDisplay } from "@/components/ai-status-display"
 import { SaveControls } from "@/components/save-controls"
 import { ResultsHistory } from "@/components/results-history"
+import { AnimalPredictionDisplay } from "@/components/animal-prediction-display"
+import { FileManager } from "@/components/file-manager"
+import { ManualSequenceInput } from "@/components/manual-sequence-input"
+import { DataManagementInterface } from "@/components/data-management-interface"
 
 export default function FoodPredictionApp() {
   const [selectedFood, setSelectedFood] = useState<string | null>(null)
@@ -13,6 +17,10 @@ export default function FoodPredictionApp() {
   const [highlightedFoods, setHighlightedFoods] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [modelMetadata, setModelMetadata] = useState<any>(null)
+
+  const [currentSequence, setCurrentSequence] = useState<string[]>([])
+  const [savedSequences, setSavedSequences] = useState<string[][]>([])
+  const [isAnimalPredicting, setIsAnimalPredicting] = useState(false)
 
   const handleFoodClick = async (foodName: string) => {
     setSelectedFood(foodName)
@@ -72,6 +80,19 @@ export default function FoodPredictionApp() {
     setPredictions(result.predictions)
     setHighlightedFoods(result.predictions.map((p: any) => p.food))
     setModelMetadata(result.metadata)
+  }
+
+  const handleSequenceChange = (sequence: string[]) => {
+    setCurrentSequence(sequence)
+  }
+
+  const handleSequencesLoaded = (sequences: string[][]) => {
+    setSavedSequences(sequences)
+  }
+
+  const handleAnimalPredict = () => {
+    setIsAnimalPredicting(true)
+    setTimeout(() => setIsAnimalPredicting(false), 2000)
   }
 
   return (
@@ -135,6 +156,45 @@ export default function FoodPredictionApp() {
 
         {/* Results History */}
         <ResultsHistory onResultSelect={handleResultSelect} />
+
+        <div className="w-full max-w-6xl mt-8 sm:mt-12 space-y-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/20">
+          <div className="text-center mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">ميزات الذكاء الاصطناعي المتقدمة</h2>
+            <p className="text-white/80 text-sm sm:text-base">تنبؤ الحيوانات وإدارة البيانات المتقدمة</p>
+          </div>
+
+          {/* LSTM Features Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            {/* Left Column */}
+            <div className="space-y-4 sm:space-y-6">
+              {/* Manual Sequence Input */}
+              <ManualSequenceInput onSequenceChange={handleSequenceChange} currentSequence={currentSequence} />
+
+              {/* Animal Prediction Display */}
+              <AnimalPredictionDisplay
+                sequence={currentSequence}
+                onPredict={handleAnimalPredict}
+                isLoading={isAnimalPredicting}
+              />
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-4 sm:space-y-6">
+              {/* File Manager */}
+              <FileManager onSequencesLoaded={handleSequencesLoaded} currentSequences={savedSequences} />
+
+              {/* Data Management Interface */}
+              <DataManagementInterface currentSequences={savedSequences} onSequencesLoad={handleSequencesLoaded} />
+            </div>
+          </div>
+
+          {/* Instructions */}
+          <div className="bg-blue-500/20 border border-blue-300/30 rounded-lg p-4 text-center">
+            <p className="text-white text-sm sm:text-base">
+              استخدم الأدوات أعلاه لإنشاء تسلسلات الأطعمة والتنبؤ بالحيوانات وإدارة البيانات
+            </p>
+          </div>
+        </div>
 
         {/* Loading Indicator */}
         {isLoading && (
