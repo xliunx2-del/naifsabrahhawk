@@ -115,7 +115,7 @@ export function FoodWheel({
 
     let statusClass = ""
     if (animalPredictions.includes(foodName)) {
-      statusClass = "ring-4 ring-red-800 shadow-red-800/80 bg-red-900/30 animate-pulse scale-105 sm:scale-110"
+      statusClass = "ring-8 ring-red-600 shadow-red-600/90 bg-red-800/50 animate-bounce scale-110 sm:scale-125 z-20"
     } else if (selectedFood === foodName) {
       statusClass = "ring-4 ring-blue-500 shadow-blue-500/50 scale-105 sm:scale-110"
     } else if (highlightedFoods.includes(foodName)) {
@@ -125,6 +125,11 @@ export function FoodWheel({
     }
 
     return `${baseClass} ${statusClass}`
+  }
+
+  const isAnimalFood = (foodName: string) => {
+    const animalFoods = ["كتكوت", "بقره", "سمكة", "جمبري"]
+    return animalFoods.includes(foodName)
   }
 
   const handleFoodClick = (foodName: string) => {
@@ -182,7 +187,19 @@ export function FoodWheel({
                 }}
               />
 
-              {hoveredFood === food.name && (
+              {animalPredictions.includes(food.name) && isAnimalFood(food.name) && (
+                <div className="absolute inset-0 flex items-center justify-center bg-red-600/80 rounded-full animate-pulse">
+                  <div className="text-white font-bold text-xs sm:text-sm md:text-base lg:text-lg">🎯</div>
+                </div>
+              )}
+
+              {animalPredictions.includes(food.name) && (
+                <div className="absolute -top-8 sm:-top-10 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-xs sm:text-sm px-3 py-1 rounded-full font-bold animate-bounce z-30 shadow-lg">
+                  حيوان متوقع!
+                </div>
+              )}
+
+              {hoveredFood === food.name && !animalPredictions.includes(food.name) && (
                 <div className="absolute -bottom-6 sm:-bottom-8 left-1/2 transform -translate-x-1/2 bg-black/90 text-white text-xs sm:text-sm px-2 py-1 rounded whitespace-nowrap z-10 pointer-events-none">
                   {food.name}
                 </div>
@@ -216,7 +233,19 @@ export function FoodWheel({
               }}
             />
 
-            {hoveredFood === food.name && (
+            {animalPredictions.includes(food.name) && isAnimalFood(food.name) && (
+              <div className="absolute inset-0 flex items-center justify-center bg-red-600/80 rounded-full animate-pulse">
+                <div className="text-white font-bold text-xs sm:text-sm md:text-base lg:text-lg">🎯</div>
+              </div>
+            )}
+
+            {animalPredictions.includes(food.name) && (
+              <div className="absolute -top-8 sm:-top-10 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-xs sm:text-sm px-3 py-1 rounded-full font-bold animate-bounce z-30 shadow-lg">
+                حيوان متوقع!
+              </div>
+            )}
+
+            {hoveredFood === food.name && !animalPredictions.includes(food.name) && (
               <div className="absolute -top-6 sm:-top-8 left-1/2 transform -translate-x-1/2 bg-black/90 text-white text-xs sm:text-sm px-2 py-1 rounded whitespace-nowrap z-10 pointer-events-none">
                 {food.name}
               </div>
